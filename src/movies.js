@@ -96,11 +96,43 @@ function turnHoursToMinutes(moviesArray) {
     movie.duration = movie.duration
       .slice(0, movie.duration.indexOf('min'))
       .split('h ');
+
+    if (movie.duration.length > 1) {
+      movie.duration =
+        Number(movie.duration[0]) * 60 + Number(movie.duration[1]);
+    } else {
+      movie.duration = Number(movie.duration[0] * 60);
+    }
+    return movie.duration;
   });
 
-  console.log(moviesArray, newMoviesArray);
   return newMoviesArray;
 }
 
 // BONUS - Iteration 8: Best yearly score average - Best yearly score average
-function bestYearAvg(moviesArray) {}
+function bestYearAvg(moviesArray) {
+  bestRate = 0;
+  bestYear = 0;
+
+  sortedMoviesArray = orderByYear(moviesArray);
+
+  if (sortedMoviesArray.length <= 0) {
+    return null;
+  }
+  yearsArray = sortedMoviesArray.map(movie => movie.year);
+
+  yearsArray.forEach(year => {
+    const avgRate = scoresAverage(
+      sortedMoviesArray.filter(movie => movie.year === year)
+    );
+
+    console.log(avgRate);
+    if (avgRate > bestRate) {
+      bestRate = avgRate;
+      bestYear = year;
+    }
+  });
+
+  // console.log(sortedMoviesArray, yearsArray);
+  return `The best year was ${bestYear} with an average score of ${bestRate}`;
+}
